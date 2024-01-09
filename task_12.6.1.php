@@ -46,18 +46,20 @@ $example_persons_array = [
     ],
 ];
 
-function getFullnameFromParts($x) {
-    return $x[0] . ' ' . $x[1] . ' ' . $x[2];
+function getFullnameFromParts($x, $y, $z) {
+    return $x . ' ' . $y . ' ' . $z;
 }
 
 function getPartsFromFullname($x) {
-    return explode(' ', $x);
+    $x = explode(' ', $x);
+    $arrayName = array ('surname' => $x[0], 'name' => $x[1], 'patronomyc' => $x[2]);
+    return $arrayName;
 }
 
 function getShortName($x) {
     $parts = getPartsFromFullname($x);
-    $surname = mb_substr($parts[0], 0, 1);
-    return $parts[1] . ' ' . $surname . '.';
+    $surname = mb_substr($parts['surname'], 0, 1);
+    return $parts['name'] . ' ' . $surname . '.';
 }
 
 function getGenderFromName($x) {
@@ -79,33 +81,33 @@ function getGenderFromName($x) {
 
     // Проверка на девочку
 
-    if (str_ends_with($parts[0], $female[0]) === true){ 
+    if (str_ends_with($parts['surname'], $female[0]) === true){ 
         $count--; 
     }
 
-    if (str_ends_with($parts[1], $female[1]) === true){ 
+    if (str_ends_with($parts['name'], $female[1]) === true){ 
         $count--; 
     }
 
-    if (str_ends_with($parts[2], $female[2]) === true){ 
+    if (str_ends_with($parts['patronomyc'], $female[2]) === true){ 
         $count--; 
     }
 
     // Проверка на мальчика
 
-    if (str_ends_with($parts[0], $male[0]) === true){ 
+    if (str_ends_with($parts['surname'], $male[0]) === true){ 
         $count++; 
     }
 
-    if (str_ends_with($parts[1], $male[1]) === true){ 
+    if (str_ends_with($parts['name'], $male[1]) === true){ 
         $count++; 
     }
 
-    if (str_ends_with($parts[1], $male[2]) === true){ 
+    if (str_ends_with($parts['name'], $male[2]) === true){ 
         $count++; 
     }
 
-    if (str_ends_with($parts[2], $male[3]) === true){ 
+    if (str_ends_with($parts['patronomyc'], $male[3]) === true){ 
         $count++; 
     }
 
@@ -154,7 +156,7 @@ function getGenderDescription($x) {
     $percentageMale = (count($fullName) !== 0 ? (count($male) / count($fullName)) : 0) * 100;
     $percentageFemale = (count($fullName) !== 0 ? (count($female) / count($fullName)) : 0) * 100;
     $percentageUndefined = (count($fullName) !== 0 ? (count($undefined) / count($fullName)) : 0) * 100;
-
+    /* //Проверка
     echo 'Гендерный состав аудитории:';
     echo '<br>';
     echo'---------------------------';
@@ -163,7 +165,7 @@ function getGenderDescription($x) {
     echo '<br>';
     echo 'Женщины -' . round($percentageFemale, 1) . '%';
     echo '<br>';
-    echo 'Не удалось определить -' . round($percentageUndefined, 1) . '%';
+    echo 'Не удалось определить -' . round($percentageUndefined, 1) . '%'; */
 }
 
 function getPerfectPartner($surname, $name, $patronymic, $x) {
@@ -172,12 +174,7 @@ function getPerfectPartner($surname, $name, $patronymic, $x) {
     $name = mb_strtolower($name);
     $patronymic = mb_strtolower($patronymic);
 
-    $fullName = [];
-    array_push($fullName, $surname);
-    array_push($fullName, $name);
-    array_push($fullName, $patronymic);
-
-    $fullName = getFullnameFromParts($fullName);
+    $fullName = getFullnameFromParts($surname, $name, $patronymic);
     $fullName = mb_convert_case($fullName, MB_CASE_TITLE , "UTF-8");
 
     $fullNameGender = getGenderFromName($fullName);
@@ -189,10 +186,10 @@ function getPerfectPartner($surname, $name, $patronymic, $x) {
         $rand = rand(0, count($x)-1);
         $randomName = $x[$rand]['fullname'];
     };
-
+    /* //Проверка
     echo getShortName($fullName) . ' + ' . getShortName($randomName) . ' = ';
     echo '<br>';
-    echo '♡ Идеально на ' . rand(5000, 10000)/100 . '%' . '♡';
+    echo '♡ Идеально на ' . rand(5000, 10000)/100 . '%' . '♡'; */
 }
 
 /* // Проверка
